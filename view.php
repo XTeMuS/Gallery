@@ -1,11 +1,10 @@
 <?php
-$p=(isset($_GET['p'])) ? $_GET['p'] : '1';
-if (empty($p) OR $p<"1") { $p="1"; }
+$id=(isset($_GET['id'])) ? $_GET['id'] : '1';
 
 $ch=curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_URL, 'https://gallery.xtemus.com/api.php?m=index&p='.$p);
+curl_setopt($ch, CURLOPT_URL, 'https://gallery.xtemus.com/api.php?m=view&id='.$id);
 $result=curl_exec($ch);
 curl_close($ch);
 $obj=json_decode($result);
@@ -22,7 +21,6 @@ $obj=json_decode($result);
     <link rel="stylesheet" href="assets/css/theme.css">
 	<link rel="icon" sizes="48x48" type="image/png" href="assets/img/Cosmo-Girl-icon.png">
 </head>
-
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
     <a class="navbar-brand font-weight-bolder mr-3" href="index.php"><img src="assets/img/Cosmo-Girl-icon.png"></a>
@@ -30,14 +28,12 @@ $obj=json_decode($result);
     <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarsDefault">
-    	<ul class="navbar-nav mr-auto align-items-center">
-    	</ul>
     	<ul class="navbar-nav ml-auto align-items-center">
     		<li class="nav-item">
     		<a class="nav-link active" href="index.php">Home</a>
     		</li>
     		<li class="nav-item">
-    		<a class="nav-link"><img class="rounded-circle mr-2" src="assets/img/av.png" width="30"><span class="align-middle">Guest</span></a>
+    		<a class="nav-link" href="index.php"><img class="rounded-circle mr-2" src="assets/img/av.png" width="30"><span class="align-middle">Guest</span></a>
     		</li>
     		<li class="nav-item dropdown">
     		<a class="nav-link" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -48,35 +44,34 @@ $obj=json_decode($result);
     </div>
     </nav>    
     <main role="main">
-    <section class="mt-4 mb-5">
-    <div class="container mb-4">
-    	<h1 class="font-weight-bold title">Explore</h1>
-    	<div class="row">
-    		<nav class="navbar navbar-expand-lg navbar-light bg-white pl-2 pr-2">
-    		<button class="navbar-light navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExplore" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation">
-    		<span class="navbar-toggler-icon"></span>
-    		</button>
-    		<div class="collapse navbar-collapse" id="navbarsExplore">
-    			<ul class="navbar-nav">
-    				<li class="nav-item">
-    				<a class="nav-link" href="new.php">New</a>
-    				</li>
-    				<li class="nav-item">
-    				<a class="nav-link" href="top.php">Top View</a>
-    				</li>
-    				<li class="nav-item">
-    				<a class="nav-link" href="random.php">Random</a>
-    				</li>
-    			</ul>
+    <section class="bg-gray200 pt-5 pb-5">
+
+    <div class="container">
+    	<div class="row justify-content-center">
+    		<div class="col-md-7">
+    			<article class="card">
+    			<img class="card-img-top mb-2" src="<?php echo $obj[0]->picture_image; ?>" alt="ID : <?php echo $obj[0]->picture_id; ?>">
+    			<div class="card-body">
+    				<h1 class="card-title display-4">
+    				Detail</h1>
+    				<ul>
+    					<li>id  :  <?php echo $obj[0]->picture_id; ?></li>
+    					<li>date  :  <?php echo $obj[0]->picture_date; ?></li>
+    					<li>view  :  <?php echo $obj[0]->picture_view; ?></li>
+    				</ul>
+    				<small class="d-block"><a class="btn btn-sm btn-gray200" href="<?php echo $obj[0]->picture_image; ?>" target="_blank"><i class="fa fa-external-link"></i>  Image new tab</a>&nbsp;&nbsp;&nbsp;<a class="btn btn-sm btn-gray200" href="https://gallery.xtemus.com/download.php?id=<?php echo $obj[0]->picture_id; ?>"><i class="fa fa-external-link"></i>  Download Image</a></small>
+    			</div>
+    			</article>
     		</div>
-    		</nav>
     	</div>
     </div>
-    <div class="container-fluid">
+
+    <div class="container-fluid mt-5">
     	<div class="row">
+    		<h5 class="font-weight-bold">More like this <?php echo count($obj); ?></h5>
     		<div class="card-columns">
 <?php
-$x=0;
+$x=1;
 while($x<count($obj)) {
 ?>
     			<div class="card card-pin">
@@ -91,7 +86,7 @@ while($x<count($obj)) {
     			</div>
 <?php
 	$x++;
-}
+	}			
 ?>
     		</div>
     	</div>
@@ -125,3 +120,6 @@ while($x<count($obj)) {
     </footer>    
 </body>
 </html>
+<?php
+CloseDB();
+?>
