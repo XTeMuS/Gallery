@@ -96,6 +96,17 @@ while($x<count($obj)) {
     		</div>
     	</div>
     </div>
+<center>
+<?php
+if ($p-1>=1) {
+?>
+<a href="index.php?p=<?php echo $p-1; ?>"><img src="assets/img/left-icon.png" border="0"></a>
+<?php
+}
+?>
+&nbsp;&nbsp;
+<a href="index.php?p=<?php echo $p+1; ?>"><img src="assets/img/right-icon.png" border="0"></a>
+</center>	    
     </section>
     </main>
     <script src="assets/js/app.js"></script>
